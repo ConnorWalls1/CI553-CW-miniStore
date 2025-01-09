@@ -1,6 +1,7 @@
 package clients.cashier;
 
 import catalogue.Basket;
+import java.awt.color.*;
 import middle.MiddleFactory;
 import middle.OrderProcessing;
 import middle.StockReadWriter;
@@ -14,14 +15,17 @@ import java.util.Observer;
 /**
  * View of the model 
  */
+
 public class CashierView implements Observer
 {
-  private static final int H = 300;       // Height of window pixels
-  private static final int W = 400;       // Width  of window pixels
+  private static final int H = 400;       // Height of window pixels
+  private static final int W = 500;       // Width  of window pixels
   
   private static final String CHECK  = "Check";
   private static final String BUY    = "Buy";
-  private static final String BOUGHT = "Bought/Pay";
+  private static final String BOUGHT = "Bought";
+  private static final String DISCOUNT = "Discount";
+  private static final String CLEAR = "Clear";
 
   private final JLabel      pageTitle  = new JLabel();
   private final JLabel      theAction  = new JLabel();
@@ -31,6 +35,9 @@ public class CashierView implements Observer
   private final JButton     theBtCheck = new JButton( CHECK );
   private final JButton     theBtBuy   = new JButton( BUY );
   private final JButton     theBtBought= new JButton( BOUGHT );
+  private final JButton     theBtDiscount = new JButton( DISCOUNT );
+  private final JButton     theBtClear = new JButton ( CLEAR );
+ 
 
   private StockReadWriter theStock     = null;
   private OrderProcessing theOrder     = null;
@@ -60,26 +67,39 @@ public class CashierView implements Observer
     rootWindow.setSize( W, H );                     // Size of Window
     rootWindow.setLocation( x, y );
 
-    Font f = new Font("Monospaced",Font.PLAIN,12);  // Font f is
+    Font f = new Font("Monospaced",Font.BOLD,12);  // Font f is
+    cp.setBackground(Color.DARK_GRAY);
 
     pageTitle.setBounds( 110, 0 , 270, 20 );       
-    pageTitle.setText( "Thank You for Shopping at MiniStrore" );                        
+    pageTitle.setText( "Thank You for Shopping at MiniStrore" );
+    pageTitle.setForeground(Color.white);
     cp.add( pageTitle );  
     
-    theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check Button
+    theBtCheck.setBounds( 16, 25+200*0, 85, 40 );    // Check Button
     theBtCheck.addActionListener(                   // Call back code
       e -> cont.doCheck( theInput.getText() ) );
     cp.add( theBtCheck );                           //  Add to canvas
 
-    theBtBuy.setBounds( 16, 25+60*1, 80, 40 );      // Buy button 
+    theBtBuy.setBounds( 16, 25+45*1, 85, 40 );      // Buy button 
     theBtBuy.addActionListener(                     // Call back code
       e -> cont.doBuy() );
     cp.add( theBtBuy );                             //  Add to canvas
 
-    theBtBought.setBounds( 16, 25+60*3, 80, 40 );   // Bought Button
+    theBtBought.setBounds( 16, 25+60*3, 85, 40 );   // Bought Button
     theBtBought.addActionListener(                  // Call back code
       e -> cont.doBought() );
     cp.add( theBtBought );                          //  Add to canvas
+    
+    theBtDiscount.setBounds(16, 160, 85, 40);      // Adding a discount
+    theBtDiscount.addActionListener(
+    		e -> cont.doDiscount() );
+    cp.add( theBtDiscount );
+    
+    
+    theBtClear.setBounds(16, 25+45*2, 85, 40);
+    theBtClear.addActionListener(
+    		e -> cont.doClear() );
+    cp.add( theBtClear );
 
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        // Blank
@@ -128,4 +148,6 @@ public class CashierView implements Observer
     theInput.requestFocus();               // Focus is here
   }
 
+
 }
+
